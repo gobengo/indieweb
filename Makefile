@@ -1,9 +1,10 @@
 .PHONY: build
 
-# For node debug, default to only this lib's logs.
+# For debug logs, default to only this lib's logs.
 # Use DEBUG=* for all.
-NODE?=iojs --harmony
 DEBUG?=indieweb*
+NODE?=iojs --harmony
+NODEMON?=./node_modules/.bin/nodemon --exec "iojs --harmony"
 
 default: build
 
@@ -21,7 +22,7 @@ server: build
 	DEBUG=$(DEBUG) $(NODE) index.js
 
 watch: build
-	DEBUG=$(DEBUG) nodemon index.js
+	DEBUG=$(DEBUG) $(NODEMON) index.js
 
 test: build config.test.json
 	npm test
