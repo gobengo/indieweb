@@ -10,7 +10,6 @@
     }
   },
   "indieweb-home": {
-    "template": "index.html",
     "title": "Jane's Indieweb"
   }
 }
