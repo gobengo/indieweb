@@ -1,26 +1,42 @@
 var log = require('debug')('indieweb');
+const xtend = require('xtend');
+const HomePage = require('./lib/indieweb-home');
 
 /**
  * Create an indieweb server
  */
-var createServer = module.exports = function () {
+var createServer = module.exports = function (config) {
   var app = require('express')()
-  var msg = "Is this the indieweb?";
-  app.get('/', function (req, res, next) {
-    res.send(msg)
-  });
+
+  // Homepage
+  app.use('/', new HomePage(xtend(
+    config['indieweb-home'],
+    {
+      indieweb: config.indieweb
+    }
+  )).express())
+
   return app;
 }
 
 if (require.main === module) {
-    main();
+  main();
 }
 
 /**
- * Create an indieweb server and listen on env.PORT
+ * Create an indieweb server and listen on config.PORT
+ * If a port is not configured, find one
  */
 function main() {
-  var port = process.env.PORT || 3000
-  log('listening on port '+port)
-  createServer().listen(port);
+  const config = require('./config').get();
+  const getPort = require('./lib/get-port');
+  Promise.resolve(config.PORT || getPort(config.findPortBase))
+  .then(function (port) {
+    log('listening for HTTP on port '+port)
+    createServer(config).listen(port);    
+  })
+  .then(null, function (err) {
+    console.error(err);
+    process.exit(1);
+  })
 }

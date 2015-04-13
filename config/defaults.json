@@ -1,0 +1,15 @@
+{
+  "findPortBase": 8000,
+  "indieweb": {
+    "domain": "my-indeweb.example.com",
+    "me": {
+      "@context": "http://www.w3.org/ns/activitystreams",
+      "@type": "Person",
+      "displayName": "Jane \"Indiana\" Doe",
+      "image": "https://randomuser.me/api/portraits/med/women/77.jpg"
+    }
+  },
+  "indieweb-home": {
+    "title": "Jane's Indieweb"
+  }
+}
