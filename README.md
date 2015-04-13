@@ -37,6 +37,9 @@ Accepted configuration parameters:
 * `config` - Path to config file other than defaults.json. `config=/path/to/config.json make server`
 * `PORT` - Port to listen for HTTP traffic on
 * `findPortBase` - If no `PORT`, [portfinder](https://www.npmjs.com/package/portfinder) will start at this port and look 1 by 1 to find an open port
+* `https` - Settings for HTTPS support
+  * `.require` - Require HTTPS. All requests over http will be redirected to https.
+  * `.trustXForwardedProto` - If incoming protocol is 'http', but the request has header for 'X-Forwarded-Proto: https', still treat it as if https. [Relevant StackOverflow](https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect)
 
 ## Use in another webapp
 

@@ -8,6 +8,12 @@ const HomePage = require('./lib/indieweb-home');
 var createServer = module.exports = function (config) {
   var app = require('express')()
 
+  // Require HTTPS?
+  if (config.https && config.https.require) {
+    log('Configuring to require HTTPS')
+    app.use(require('express-sslify').HTTPS(config.https.trustXForwardedProto))    
+  }
+
   // Homepage
   app.use('/', new HomePage(xtend(
     config['indieweb-home'],
