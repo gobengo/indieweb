@@ -14,18 +14,20 @@ var createServer = module.exports = function () {
 }
 
 if (require.main === module) {
-    main();
+  main();
 }
 
 /**
- * Create an indieweb server and listen on env.PORT
+ * Create an indieweb server and listen on config.PORT
+ * If a port is not configured, find one
  */
 function main() {
+  const config = require('./config').get();
   const getPort = require('./lib/get-port');
-  var configPort = config.get('PORT');
-  Promise.resolve(configPort || getPort())
+  console.log('looking for port from', config.findPortBase)
+  Promise.resolve(config.PORT || getPort(config.findPortBase))
   .then(function (port) {
-    log('listening on port '+port)
-    createServer().listen(port);    
+    log('listening for HTTP on port '+port)
+    createServer(config.get()).listen(port);    
   })
 }

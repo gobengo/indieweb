@@ -1,4 +1,4 @@
 {
   "domain": "my-indeweb.example.com",
-  "PORT": 8000
+  "findPortBase": 8000
 }
