@@ -1,15 +1,21 @@
 var log = require('debug')('indieweb');
-var config = require('./config');
+const xtend = require('xtend');
+const HomePage = require('./lib/indieweb-home');
 
 /**
  * Create an indieweb server
  */
-var createServer = module.exports = function () {
+var createServer = module.exports = function (config) {
   var app = require('express')()
-  var msg = "Is this the indieweb?";
-  app.get('/', function (req, res, next) {
-    res.send(msg)
-  });
+
+  // Homepage
+  app.use('/', new HomePage(xtend(
+    config['indieweb-home'],
+    {
+      indieweb: config.indieweb
+    }
+  )).express())
+
   return app;
 }
 
