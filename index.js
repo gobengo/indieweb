@@ -1,4 +1,5 @@
 var log = require('debug')('indieweb');
+var config = require('./config');
 
 /**
  * Create an indieweb server
@@ -20,7 +21,11 @@ if (require.main === module) {
  * Create an indieweb server and listen on env.PORT
  */
 function main() {
-  var port = process.env.PORT || 3000
-  log('listening on port '+port)
-  createServer().listen(port);
+  const getPort = require('./lib/get-port');
+  var configPort = config.get('PORT');
+  Promise.resolve(configPort || getPort())
+  .then(function (port) {
+    log('listening on port '+port)
+    createServer().listen(port);    
+  })
 }
