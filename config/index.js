@@ -1,23 +1,31 @@
-var log = require('debug')('indieweb/config');
+import debug from 'debug';
+import nconf from 'nconf';
 
-var config = module.exports = require('nconf')
-  .argv({
-    config: {
-      describe: "Path to config file to use for config values"
-    },
-    PORT: {
-      describe: "Port to listen for HTTP traffic on",
-    }
-    // TODO: https.*
-  })
-  .env({
-    separator: '_'
-  })
+const log = debug('indieweb/config');
 
-var configFile = config.get('config');
-if (configFile) {
-  config = config.file(configFile)
-}
+export default (() => {
+  const config = nconf
+    .argv({
+      config: {
+        describe: "Path to config file to use for config values"
+      },
+      PORT: {
+        describe: "Port to listen for HTTP traffic on",
+      }
+      // TODO: https.*
+    })
+    .env({
+      separator: '_'
+    })
 
-config
-  .file(__dirname + '/defaults.json')
+  var configFile = config.get('config');
+  if (configFile) {
+    config.file(configFile)
+  }
+
+  config
+    .file(__dirname + '/defaults.json')
+
+  return config
+}())
+
