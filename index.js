@@ -24,10 +24,13 @@ if (require.main === module) {
 function main() {
   const config = require('./config').get();
   const getPort = require('./lib/get-port');
-  console.log('looking for port from', config.findPortBase)
   Promise.resolve(config.PORT || getPort(config.findPortBase))
   .then(function (port) {
     log('listening for HTTP on port '+port)
-    createServer(config.get()).listen(port);    
+    createServer(config).listen(port);    
+  })
+  .then(null, function (err) {
+    console.error(err);
+    process.exit(1);
   })
 }
