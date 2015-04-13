@@ -24,5 +24,5 @@ server: build
 watch: build
 	DEBUG=$(DEBUG) $(NODEMON) index.js
 
-test: build config.test.json
+test: build
 	npm test
