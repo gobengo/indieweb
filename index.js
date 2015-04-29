@@ -2,12 +2,14 @@
 const log = require('debug')('indieweb');
 const xtend = require('xtend');
 const HomePage = require('./lib/indieweb-home');
+const Posts = require('./lib/indieweb-posts');
 
 /**
  * Create an indieweb server
  */
 var createServer = module.exports = function (config) {
-  var app = require('express')()
+  const app = require('express')();
+  const objectStore = new (require('./lib/object-stores/in-memory'))()
 
   // Require HTTPS?
   if (config.https && config.https.require) {
@@ -16,10 +18,23 @@ var createServer = module.exports = function (config) {
   }
 
   // Homepage
-  app.use('/', new HomePage(xtend(
+  app.use('/$', new HomePage(xtend(
     config['indieweb-home'],
     {
       indieweb: config.indieweb
+    }
+  )).express())
+
+  // Have to explicitly redirect to trailing slash
+  // https://github.com/strongloop/express/issues/2281
+  app.all('/posts$', function (req, res, next) {
+    res.redirect('/posts/');
+  })
+  app.use('/posts/', new Posts(xtend(
+    config['indieweb-posts'],
+    {
+      indieweb: config.indieweb,
+      objects: objectStore
     }
   )).express())
 
